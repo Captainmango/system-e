@@ -1,7 +1,6 @@
 - hosts: localhost
   pre_tasks:
   - name: Update Apt
-    become: true
     apt:
       force_apt_get: true
       update_cache: true
@@ -10,4 +9,6 @@
       - install
       - core
   tasks:
-    - tasks/base.yml
+    - name: Steps
+      include_tasks: 
+        file: tasks/base.yml
