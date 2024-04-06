@@ -3,7 +3,9 @@
 Ansible stuff that gets a new machine set up for me. This is supposed to be my bare minimum set up (ZSH Powerline10k etc). Should not be setting up loads of language stuff.
 
 > Prefer working build over completeness
+
 > Prefer Simplicity over Complexity
+
 > Prefer stability over speed
 
 ## Todo list
