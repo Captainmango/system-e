@@ -11,23 +11,23 @@ Ansible stuff that gets a new machine set up for me. This is supposed to be my b
 ## Todo list
 - [x] Set up Ansible playbooks in tasks folder
 - [x] Set up test bed with Docker
-- [ ] Create task for installing the font (MesloLGS)
-- [ ] Create task for installing basic deps
+- [x] Create task for installing the font (MesloLGS)
+- [x] Create task for installing basic deps
 - [ ] Create task for installing languages
-- [ ] Create task for porting configurations
+- [x] Create task for porting configurations
 
 
 ### basic deps
-- git
+- ~git~
 - docker (with usergroup to not need sudo)
-- c-utils (build-essentials)
+- ~c-utils (build-essentials)~
 - curl
 - git cli
 - git-town
 - portainer?
-- tmux
-- ohmyzsh
-- powerline10k
+- ~tmux~
+- ~ohmyzsh~
+- ~powerline10k~
 
 
 ### Language deps

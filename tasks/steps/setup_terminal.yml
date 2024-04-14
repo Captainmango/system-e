@@ -26,7 +26,7 @@
   failed_when: "'FAILED' in ohmyzsh_result.stderr"
 
 - name: Install Powerline10k theme
-  command: git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+  command: git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${HOME}/.oh-my-zsh/custom/themes/powerlevel10k
 
 - name: Set ZSH_THEME in .zshrc
   lineinfile:

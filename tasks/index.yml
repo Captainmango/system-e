@@ -9,3 +9,11 @@
 - name: Terminal
   include_tasks:
     file: ./steps/setup_terminal.yml
+
+- name: Copy config files
+  include_tasks:
+    file: ./steps/copy_config.yml
+
+# - name: Install Docker
+
+# - name: Install Mise and programming languages

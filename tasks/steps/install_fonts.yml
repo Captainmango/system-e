@@ -14,13 +14,13 @@
   become: true
   when: ttf_exists is failed
   file:
-    path: "/usr/local/share/fonts/TTF"
+    path: "/usr/share/fonts/TTF"
     state: directory
 
 - name: Download Meslo font and unpack into TTF folder
   become: true
   unarchive:
     src: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Meslo.zip
-    dest: "/usr/local/share/fonts/TTF"
+    dest: "/usr/share/fonts/TTF"
     remote_src: yes
 ...
