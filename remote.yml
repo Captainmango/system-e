@@ -1,4 +1,5 @@
-- hosts: localhost
+- hosts: target_group
+  user: "{{ lookup('env', 'USER') }}"
   pre_tasks:
   - name: Update Apt
     become: true
