@@ -9,7 +9,7 @@ Ansible stuff that gets a new machine set up for me. This is supposed to be my b
 > Prefer stability over speed
 
 ## Todo list
-- [ ] Set up Ansible playbooks in tasks folder
+- [x] Set up Ansible playbooks in tasks folder
 - [x] Set up test bed with Docker
 - [ ] Create task for installing the font (MesloLGS)
 - [ ] Create task for installing basic deps
