@@ -5,19 +5,25 @@
     path: "/usr/share/fonts"
     state: directory
 
-- name: Ensure Meslo font isn't already there
-  shell: "ls /usr/share/fonts/Meslo"
-  register: meslo_exists
+- name: Ensure TTF isn't already there
+  shell: "ls /usr/share/fonts/TTF"
+  register: ttf_exists
   ignore_errors: yes
 
-- name: Download Meslo font and unpack
+- name: Create TTF directory if it doesn't exist
   become: true
-  when: meslo_exists is failed
+  when: ttf_exists is failed
+  file:
+    path: "/usr/local/share/fonts/TTF"
+    state: directory
+
+- name: Download Meslo font and unpack into TTF folder
+  become: true
   unarchive:
     src: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Meslo.zip
-    dest: "/usr/share/fonts/Meslo"
+    dest: "/usr/local/share/fonts/TTF"
     remote_src: yes
 
 - name: Make sure font is installed
-  shell: "ls /usr/share/fonts/Meslo"
+  shell: "ls /usr/local/share/fonts/TTF | grep Meslo"
 ...
