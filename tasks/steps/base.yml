@@ -1,6 +1,12 @@
-- name: Hello world
-  shell: echo "hello world"
-  register: out
+- name: Install basic bits (git, curl, unzip, tmux, build-essential)
+  become: true
+  apt:
+    pkg:
+      - git
+      - curl
+      - tmux
+      - build-essential
+      - unzip
+    state: latest
 
-- debug: var=out.stdout_lines
 

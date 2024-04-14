@@ -1,0 +1,23 @@
+---
+- name: Ensure fonts directory exists
+  become: true
+  file:
+    path: "/usr/share/fonts"
+    state: directory
+
+- name: Ensure Meslo font isn't already there
+  shell: "ls /usr/share/fonts/Meslo"
+  register: meslo_exists
+  ignore_errors: yes
+
+- name: Download Meslo font and unpack
+  become: true
+  when: meslo_exists is failed
+  unarchive:
+    src: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Meslo.zip
+    dest: "/usr/share/fonts/Meslo"
+    remote_src: yes
+
+- name: Make sure font is installed
+  shell: "ls /usr/share/fonts/Meslo"
+...

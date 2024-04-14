@@ -1,3 +1,7 @@
-- name: Steps
+- name: Base things
   include_tasks:
       file: ./steps/base.yml
+
+- name: Fonts
+  include_tasks:
+    file: ./steps/install_fonts.yml
