@@ -17,6 +17,7 @@ USER "${USER}"
 RUN mkdir ~/.ssh
 RUN chmod -R 700 ~/.ssh
 
+# Get the public key for the temp identity into the right place with correct access
 COPY --chown=${USER}:sudo id_rsa.pub /home/${USER}/.ssh/id_rsa.pub
 RUN cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 RUN chmod 644 ~/.ssh/id_rsa.pub
