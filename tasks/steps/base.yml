@@ -1,3 +1,4 @@
+---
 - name: Install basic bits (git, curl, unzip, tmux, build-essential)
   become: true
   apt:
@@ -10,5 +11,4 @@
       - yadm
       - neovim
     state: latest
-
-
+...
