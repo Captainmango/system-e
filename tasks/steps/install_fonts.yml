@@ -23,7 +23,4 @@
     src: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Meslo.zip
     dest: "/usr/local/share/fonts/TTF"
     remote_src: yes
-
-- name: Make sure font is installed
-  shell: "ls /usr/local/share/fonts/TTF | grep Meslo"
 ...

@@ -5,3 +5,7 @@
 - name: Fonts
   include_tasks:
     file: ./steps/install_fonts.yml
+
+- name: Terminal
+  include_tasks:
+    file: ./steps/setup_terminal.yml

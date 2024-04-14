@@ -1,0 +1,42 @@
+---
+- name: ZSH
+  become: true
+  apt:
+    pkg:
+      - zsh
+
+- name: Set SHELL to be ZSH
+  become: true
+  shell: chsh -s $(which zsh)
+
+- name: Ensure ZSH is the default shell
+  user:
+    name: "{{ lookup('env', 'USER') }}"
+    shell: "/usr/bin/zsh"
+  become: true
+
+- name: Download Oh My Zsh installation script
+  get_url:
+    url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+    dest: /tmp/install_ohmyzsh.sh
+
+- name: Run Oh My Zsh installation script
+  command: sh /tmp/install_ohmyzsh.sh --unattended
+  register: ohmyzsh_result
+  failed_when: "'FAILED' in ohmyzsh_result.stderr"
+
+- name: Install Powerline10k theme
+  command: git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+
+- name: Set ZSH_THEME in .zshrc
+  lineinfile:
+    path: ~/.zshrc
+    regexp: '^ZSH_THEME'
+    line: ZSH_THEME="powerlevel10k/powerlevel10k"
+
+- name: Set EDITOR in .zshrc
+  lineinfile:
+    path: ~/.zshrc
+    line: EDITOR=nvim
+    create: yes
+...
