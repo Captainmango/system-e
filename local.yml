@@ -9,4 +9,4 @@
   tasks:
     - name: Steps
       include_tasks:
-        file: tasks/index.yml
+        file: tasks/main.yml
