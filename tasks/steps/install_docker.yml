@@ -1,0 +1,75 @@
+---
+- name: Install required packages
+  become: true
+  apt:
+    pkg:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg
+      - software-properties-common
+
+- name: Create directory for Docker's GPG key
+  become: true
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+
+- name: Add Docker's official GPG key
+  become: true
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    keyring: /etc/apt/keyrings/docker.gpg
+    state: present
+
+- name: Print architecture variables
+  debug:
+    msg: "Architecture: {{ ansible_architecture }}, Codename: {{ ansible_lsb.codename }}"
+
+- name: Add Docker repository
+  become: true
+  apt_repository:
+    repo: >-
+      deb [arch={{ arch_mapping[ansible_architecture] | default(ansible_architecture) }}
+      signed-by=/etc/apt/keyrings/docker.gpg]
+      https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename }} stable
+    filename: docker
+    state: present
+
+- name: Install Docker and related packages
+  become: true
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: true
+  loop:
+    - docker-ce
+    - docker-ce-cli
+    - containerd.io
+    - docker-buildx-plugin
+    - docker-compose-plugin
+
+- name: Add Docker group
+  become: true
+  group:
+    name: docker
+    state: present
+
+- name: Add user to Docker group
+  become: true
+  user:
+    name: "{{ lookup('env', 'USER') }}"
+    groups: docker
+    append: true
+
+- name: Enable and start Docker services
+  become: true
+  systemd_service:
+    name: "{{ item }}"
+    enabled: true
+    state: started
+  loop:
+    - docker.service
+    - containerd.service
+...

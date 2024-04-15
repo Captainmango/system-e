@@ -1,4 +1,8 @@
 - hosts: localhost
+  vars:
+    arch_mapping: # For the Docker installation so arch is right
+      x86_64: amd64
+      aarch64: arm64
   pre_tasks:
   - name: Update Apt
     become: true
