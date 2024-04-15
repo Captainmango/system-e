@@ -1,9 +1,15 @@
 ---
+- name: Add Alacritty PPA
+  become: true
+  apt_repository:
+    repo: ppa:aslatter/ppa
+
 - name: ZSH
   become: true
   apt:
     pkg:
       - zsh
+      - alacritty
 
 - name: Set SHELL to be ZSH
   become: true
