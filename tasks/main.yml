@@ -18,4 +18,6 @@
   include_tasks:
     file: ./steps/install_docker.yml
 
-# - name: Install Mise and programming languages
+- name: Install Mise and programming languages
+  include_tasks:
+    file: ./steps/install_mise.yml
