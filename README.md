@@ -20,19 +20,19 @@ Ansible stuff that gets a new machine set up for me. This is supposed to be my b
 - [x] Create task for installing basic deps
 - [x] Create task for porting configurations
 - [ ] Create task for installing languages using Mise
-- [ ] Add Docker and sudo group for Docker
-- [ ] Add Portainer
+- [x] Add Docker and sudo group for Docker
+- ~[x] Add Portainer~ We need the docker daemon to be started and booting systemD in docker isn't worth it so we cannot test this
 - [ ] Set up scheduled testing using Github Actions (run weekly or monthly)
 
 
 ### basic deps
 - ~git~
-- docker (with usergroup to not need sudo)
+- ~docker (with usergroup to not need sudo)~
 - ~c-utils (build-essentials)~
 - ~curl~
 - git cli
 - git-town
-- portainer?
+- ~portainer~
 - ~tmux~
 - ~ohmyzsh~
 - ~powerline10k~

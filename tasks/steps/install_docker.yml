@@ -63,12 +63,11 @@
     groups: docker
     append: true
 
-- name: Enable and start Docker services
+- name: Enable Docker services so they start on boot
   become: true
   systemd_service:
     name: "{{ item }}"
     enabled: true
-    state: started
   loop:
     - docker.service
     - containerd.service
