@@ -21,8 +21,9 @@ Ansible stuff that gets a new machine set up for me. This is supposed to be my b
 - [x] Create task for porting configurations
 - [x] Create task for installing languages using Mise
 - [x] Add Docker and sudo group for Docker
-- ~[x] Add Portainer~ We need the docker daemon to be started and booting systemD in docker isn't worth it so we cannot test this
-- [ ] Set up scheduled testing using Github Actions (run weekly or monthly)
+- [x] ~Add Portainer~ We need the docker daemon to be started and booting systemD in docker isn't worth it so we cannot test this
+- [x] Set up scheduled testing using Github Actions (run weekly or monthly)
+- [ ] Set up Git and associated tools (github CLI and Git-town)
 
 
 ### basic deps
@@ -38,9 +39,9 @@ Ansible stuff that gets a new machine set up for me. This is supposed to be my b
 - ~powerline10k~
 
 
-### Language deps
-- Go
-- Ruby
-- Python
-- Scala/ Java
+### Post Run Checklist
+- [ ] Check path is set up
+- [ ] Make sure SystemD daemon is reloaded
+- [ ] Install languages we need
+- [ ] Make sure aliases and ZSH is set up properly
 
