@@ -19,7 +19,7 @@ Ansible stuff that gets a new machine set up for me. This is supposed to be my b
 - [x] Create task for installing the font (MesloLGS)
 - [x] Create task for installing basic deps
 - [x] Create task for porting configurations
-- [ ] Create task for installing languages using Mise
+- [x] Create task for installing languages using Mise
 - [x] Add Docker and sudo group for Docker
 - ~[x] Add Portainer~ We need the docker daemon to be started and booting systemD in docker isn't worth it so we cannot test this
 - [ ] Set up scheduled testing using Github Actions (run weekly or monthly)

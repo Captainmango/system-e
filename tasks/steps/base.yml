@@ -9,6 +9,5 @@
       - build-essential
       - unzip
       - yadm
-      - neovim
     state: latest
 ...

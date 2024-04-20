@@ -9,7 +9,7 @@
 
 - name: Create .asdf directory (For symlinking lang installs for IDEs)
   file:
-    path: "$HOME/.asdf"
+    path: "~/.asdf"
     state: directory
 
 - name: Symlink the Mise folder with the .asdf folder
