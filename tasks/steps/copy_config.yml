@@ -1,6 +1,6 @@
 ---
 - name: Get config with yadm
-  command: yadm clone https://github.com/Captainmango/config-files.git
+  command: yadm clone -f https://github.com/Captainmango/config-files.git
 
 - name: Add aliases to zshrc
   lineinfile:
