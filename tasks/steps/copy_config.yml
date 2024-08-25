@@ -1,5 +1,6 @@
 ---
 - name: Get config with yadm
+  become: true
   command: yadm clone -f https://github.com/Captainmango/config-files.git
 
 - name: Add aliases to zshrc
