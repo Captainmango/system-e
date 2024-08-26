@@ -1,10 +1,12 @@
 ---
 - name: Download Mise install script
+  become: true
   get_url:
     url: https://mise.run
     dest: /tmp/mise_install.sh
 
 - name: Run Mise installation script
+  become: true
   command: sh /tmp/mise_install.sh
 
 - name: Create .asdf directory (For symlinking lang installs for IDEs)

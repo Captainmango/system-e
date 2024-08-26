@@ -9,5 +9,6 @@
       - build-essential
       - unzip
       - yadm
+      - openssh-server
     state: latest
 ...

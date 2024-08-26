@@ -10,8 +10,11 @@ Ansible stuff that gets a new machine set up for me. This is supposed to be my b
 
 ## Usage
 1. Clone the repo
-2. Run the install local bin script `./bin/install-local.sh`
-3. Go off and do something else (If TZInfo isn't installed, the script will ask for this.)
+2. Update the package repository (this was made for Debian distros so use APT)
+3. Run the install local bin script `./bin/install-local.sh`
+4. Go off and do something else (If TZInfo isn't installed, the script will ask for this.)
+5. Check everything has run as expected (Probably hasn't lol)
+6. Install Git Town https://www.git-town.com/install
 
 ## Todo list
 - [x] Set up Ansible playbooks in tasks folder
@@ -32,7 +35,7 @@ Ansible stuff that gets a new machine set up for me. This is supposed to be my b
 - ~docker (with usergroup to not need sudo)~
 - ~c-utils (build-essentials)~
 - ~curl~
-- git cli
+- ~git cli~
 - git-town
 - ~portainer~
 - ~tmux~
@@ -41,6 +44,8 @@ Ansible stuff that gets a new machine set up for me. This is supposed to be my b
 
 
 ### Post Run Checklist
+- [ ] Create an SSH key for Git and anything else as well while you're at it and add it to the ssh server
+- [ ] Copy config using yadm `sudo yadm pull -f [config repo thing here]`
 - [ ] Check path is set up
 - [ ] Make sure SystemD daemon is reloaded
 - [ ] Install languages we need
