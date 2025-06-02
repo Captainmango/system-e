@@ -8,17 +8,4 @@
 - name: Run Mise installation script
   become: true
   command: sh /tmp/mise_install.sh
-
-- name: Create .asdf directory (For symlinking lang installs for IDEs)
-  file:
-    path: "~/.asdf"
-    state: directory
-
-- name: Symlink the Mise folder with the .asdf folder
-  file:
-    src: ~/.local/share/mise
-    dest: ~/.asdf
-    force: true
-    owner: "{{ lookup('env', 'USER') }}"
-    state: link
 ...
