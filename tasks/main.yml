@@ -18,9 +18,9 @@
   include_tasks:
     file: ./steps/copy_config.yml
 
-- name: Install Mise and programming languages
-  include_tasks:
-    file: ./steps/install_mise.yml
+# - name: Install Mise and programming languages
+#   include_tasks:
+#     file: ./steps/install_mise.yml
 
 - name: Install Docker and add Docker Group
   include_tasks:
