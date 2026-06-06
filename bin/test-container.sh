@@ -70,22 +70,28 @@ function run_ansible_playbook() {
     fi
 }
 
+function exec_as_user() {
+    local user="$1"
+    shift
+    docker exec --user "${user}" "${NAME}" "$@"
+}
+
 function validate_dotfiles() {
     local user="$1"
     local failed=0
 
     echo "Validating dotfiles..."
-    if ! docker exec "${NAME}" test -f "/home/${user}/.zshrc"; then
+    if ! exec_as_user "${user}" test -f "/home/${user}/.zshrc"; then
         echo "FAIL: .zshrc not found"
         failed=1
     fi
 
-    if ! docker exec "${NAME}" test -f "/home/${user}/.zsh_aliases"; then
+    if ! exec_as_user "${user}" test -f "/home/${user}/.zsh_aliases"; then
         echo "FAIL: .zsh_aliases not found"
         failed=1
     fi
 
-    if ! docker exec "${NAME}" test -d "/home/${user}/.local/share/yadm/repo.git"; then
+    if ! exec_as_user "${user}" test -d "/home/${user}/.local/share/yadm/repo.git"; then
         echo "FAIL: yadm repo not found"
         failed=1
     fi
@@ -97,15 +103,17 @@ function validate_docker_group() {
     local user="$1"
 
     echo "Validating Docker group..."
-    if ! docker exec "${NAME}" sh -c "groups ${user} | grep -qw docker"; then
+    if ! exec_as_user "${user}" sh -c "groups | grep -qw docker"; then
         echo "FAIL: ${user} is not in the docker group"
         return 1
     fi
 }
 
 function validate_fonts() {
+    local user="$1"
+
     echo "Validating fonts..."
-    if ! docker exec "${NAME}" sh -c 'ls "/usr/share/fonts/truetype/MesloLGSDZ Nerd Font" | grep -qi meslo'; then
+    if ! exec_as_user "${user}" sh -c 'ls "/usr/share/fonts/truetype/MesloLGSDZ Nerd Font" | grep -qi meslo'; then
         echo "FAIL: Meslo font not found in /usr/share/fonts/truetype/MesloLGSDZ Nerd Font"
         return 1
     fi
@@ -116,7 +124,7 @@ function validate_default_shell() {
 
     echo "Validating default shell..."
     local default_shell
-    default_shell=$(docker exec "${NAME}" getent passwd "${user}" | cut -d: -f7)
+    default_shell=$(exec_as_user "${user}" getent passwd "${user}" | cut -d: -f7)
     if [[ "${default_shell}" != "/usr/bin/zsh" ]]; then
         echo "FAIL: Default shell is ${default_shell}, expected /usr/bin/zsh"
         return 1
@@ -124,47 +132,55 @@ function validate_default_shell() {
 }
 
 function validate_alacritty() {
+    local user="$1"
+
     echo "Validating Alacritty..."
-    if ! docker exec "${NAME}" sh -c "command -v alacritty > /dev/null 2>&1"; then
+    if ! exec_as_user "${user}" sh -c "command -v alacritty > /dev/null 2>&1"; then
         echo "FAIL: alacritty not found"
         return 1
     fi
 }
 
 function validate_mise() {
+    local user="$1"
+
     echo "Validating Mise..."
-    if ! docker exec "${NAME}" sh -c "command -v mise > /dev/null 2>&1"; then
+    if ! exec_as_user "${user}" sh -c "command -v mise > /dev/null 2>&1"; then
         echo "FAIL: mise not found"
         return 1
     fi
 
-    if ! docker exec "${NAME}" sh -c "mise --version > /dev/null 2>&1"; then
+    if ! exec_as_user "${user}" sh -c "mise --version > /dev/null 2>&1"; then
         echo "FAIL: mise is not working"
         return 1
     fi
 }
 
 function validate_neovim() {
+    local user="$1"
+
     echo "Validating Neovim..."
-    if ! docker exec "${NAME}" sh -c "command -v nvim > /dev/null 2>&1"; then
+    if ! exec_as_user "${user}" sh -c "command -v nvim > /dev/null 2>&1"; then
         echo "FAIL: nvim not found"
         return 1
     fi
 
-    if ! docker exec "${NAME}" sh -c "nvim --version > /dev/null 2>&1"; then
+    if ! exec_as_user "${user}" sh -c "nvim --version > /dev/null 2>&1"; then
         echo "FAIL: nvim is not working"
         return 1
     fi
 }
 
 function validate_git_town() {
+    local user="$1"
+
     echo "Validating Git Town..."
-    if ! docker exec "${NAME}" sh -c "command -v git-town > /dev/null 2>&1"; then
+    if ! exec_as_user "${user}" sh -c "command -v git-town > /dev/null 2>&1"; then
         echo "FAIL: git-town not found"
         return 1
     fi
 
-    if ! docker exec "${NAME}" sh -c "git-town --version > /dev/null 2>&1"; then
+    if ! exec_as_user "${user}" sh -c "git-town --version > /dev/null 2>&1"; then
         echo "FAIL: git-town is not working"
         return 1
     fi
@@ -180,12 +196,12 @@ function validate_container() {
 
     validate_dotfiles "${user}" || failed=1
     validate_docker_group "${user}" || failed=1
-    validate_fonts || failed=1
+    validate_fonts "${user}" || failed=1
     validate_default_shell "${user}" || failed=1
-    validate_alacritty || failed=1
-    validate_mise || failed=1
-    validate_neovim || failed=1
-    validate_git_town || failed=1
+    validate_alacritty "${user}" || failed=1
+    validate_mise "${user}" || failed=1
+    validate_neovim "${user}" || failed=1
+    validate_git_town "${user}" || failed=1
 
     if [[ "${failed}" -eq 1 ]]; then
         echo "Validation FAILED"
