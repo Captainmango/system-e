@@ -35,3 +35,4 @@ Never run the test-container.sh script. Ask the user to run this and provide the
 - **Environment variable**: `USER` must be set. It is used by `remote.yml`, `Dockerfile.test`, `bin/test-container.sh`, and `tasks/steps/install_docker.yml` (adding user to `docker` group).
 - **Architecture mapping**: Both playbooks define `arch_mapping` (`x86_64` → `amd64`, `aarch64` → `arm64`) for the Docker APT repository.
 - **Config bootstrap**: `copy_config.yml` force-clones `https://github.com/Captainmango/config-files.git` via `yadm`.
+- **Step Validation**: New steps must have a validation function in bin/test-container.sh to validate the outcome is successful.

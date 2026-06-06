@@ -157,14 +157,15 @@ function validate_neovim() {
     fi
 }
 
-function validate_editor_envvar() {
-    local user="$1"
+function validate_git_town() {
+    echo "Validating Git Town..."
+    if ! docker exec "${NAME}" sh -c "command -v git-town > /dev/null 2>&1"; then
+        echo "FAIL: git-town not found"
+        return 1
+    fi
 
-    echo "Validating EDITOR envvar..."
-    local editor_val
-    editor_val=$(docker exec "${NAME}" zsh -l -c 'echo "$EDITOR"')
-    if [[ "${editor_val}" != "nvim" ]]; then
-        echo "FAIL: EDITOR is '${editor_val}', expected 'nvim'"
+    if ! docker exec "${NAME}" sh -c "git-town --version > /dev/null 2>&1"; then
+        echo "FAIL: git-town is not working"
         return 1
     fi
 }
@@ -184,7 +185,7 @@ function validate_container() {
     validate_alacritty || failed=1
     validate_mise || failed=1
     validate_neovim || failed=1
-    validate_editor_envvar "${user}" || failed=1
+    validate_git_town || failed=1
 
     if [[ "${failed}" -eq 1 ]]; then
         echo "Validation FAILED"

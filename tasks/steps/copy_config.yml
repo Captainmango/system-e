@@ -4,7 +4,7 @@
 
 - name: Add aliases to zshrc
   lineinfile:
-    path: "$HOME/.zshrc"
+    path: ~/.zshrc
     line: source ~/.zsh_aliases
     create: yes
 ...

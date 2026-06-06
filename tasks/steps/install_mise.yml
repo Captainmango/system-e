@@ -8,4 +8,6 @@
 - name: Run Mise installation script
   become: true
   command: sh /tmp/mise_install.sh
+  environment:
+    MISE_INSTALL_PATH: /usr/local/bin/mise
 ...

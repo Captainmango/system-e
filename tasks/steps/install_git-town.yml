@@ -1,0 +1,28 @@
+---
+- name: Get latest git-town release info
+  uri:
+    url: https://api.github.com/repos/git-town/git-town/releases/latest
+    return_content: yes
+  register: git_town_release
+  retries: 3
+  delay: 5
+  until: git_town_release is succeeded
+
+- name: Set git-town architecture suffix
+  set_fact:
+    git_town_arch: "{{ 'intel_64' if ansible_architecture == 'x86_64' else 'arm_64' }}"
+
+- name: Download git-town .deb package
+  get_url:
+    url: "https://github.com/git-town/git-town/releases/download/{{ git_town_release.json.tag_name }}/git-town_linux_{{ git_town_arch }}.deb"
+    dest: "/tmp/git-town_{{ git_town_release.json.tag_name }}.deb"
+    mode: '0644'
+  retries: 3
+  delay: 5
+  until: git_town_download is succeeded
+  register: git_town_download
+
+- name: Install git-town
+  become: true
+  apt:
+    deb: "/tmp/git-town_{{ git_town_release.json.tag_name }}.deb"

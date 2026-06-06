@@ -37,6 +37,6 @@
 - name: Set EDITOR in .zshrc
   lineinfile:
     path: ~/.zshrc
-    line: EDITOR=nvim
+    line: export EDITOR=nvim
     create: yes
 ...

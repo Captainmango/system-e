@@ -34,3 +34,7 @@
   include_tasks:
     file: ./steps/neovim.yml
 
+- name: Install Git Town
+  include_tasks:
+    file: ./steps/install_git-town.yml
+

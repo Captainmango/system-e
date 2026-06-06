@@ -1,15 +1,21 @@
 ---
-- name: Download Neovim and upack
+- name: Download Neovim and unpack
   become: true
   unarchive:
-    src: https://github.com/neovim/neovim/releases/download/v0.10.1/nvim-linux64.tar.gz
+    src: https://github.com/neovim/neovim/releases/download/v0.11.7/nvim-linux-x86_64.tar.gz
     dest: "/opt"
     remote_src: yes
 
-- name: Add nvim bin to PATH
+- name: Symlink nvim to /usr/local/bin
   become: true
+  file:
+    src: "/opt/nvim-linux-x86_64/bin/nvim"
+    dest: "/usr/local/bin/nvim"
+    state: link
+
+- name: Add nvim bin to PATH
   lineinfile:
     path: ~/.zshrc
-    line: export PATH="$PATH:/opt/nvim-linux64/bin"
+    line: export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
     create: yes
 ...
