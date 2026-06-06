@@ -103,7 +103,7 @@ function validate_docker_group() {
     local user="$1"
 
     echo "Validating Docker group..."
-    if ! exec_as_user "${user}" sh -c "groups | grep -qw docker"; then
+    if ! exec_as_user "${user}" sh -c "groups ${user} | grep -qw docker"; then
         echo "FAIL: ${user} is not in the docker group"
         return 1
     fi

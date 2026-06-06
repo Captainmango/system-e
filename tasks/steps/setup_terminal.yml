@@ -7,7 +7,7 @@
 
 - name: Set SHELL to be ZSH
   become: true
-  shell: chsh -s $(which zsh)
+  shell: chsh -s $(which zsh) {{ lookup('env', 'USER') }}
 
 - name: Ensure ZSH is the default shell
   user:
