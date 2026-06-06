@@ -24,10 +24,16 @@ Ansible stuff that gets a new machine set up for me. This is supposed to be my b
 - [x] Create task for porting configurations
 - [x] Create task for installing languages using Mise
 - [x] Add Docker and sudo group for Docker
-- [x] ~Add Portainer~ We need the docker daemon to be started and booting systemD in docker isn't worth it so we cannot test this
 - [x] Set up scheduled testing using Github Actions (run weekly or monthly)
-- [ ] Set up Git and associated tools (github CLI and Git-town)
-- [ ] Set up Neovim (get the tarball from latest and unzip into opt, then Symlink)
+- [x] Set up Git and associated tools (github CLI and Git-town)
+- [x] Set up Neovim (get the tarball from latest and unzip into opt, then Symlink)
+- [ ] SSH keys maybe?
+- [ ] Move to Starship over Powerline10k
+- [ ] Optional tasks
+    - [ ] Bitwarden
+    - [ ] Chrome
+    - [ ] Obsidian + vaults
+    - [ ] Directory structure
 
 
 ### basic deps
