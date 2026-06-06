@@ -14,7 +14,7 @@
 - name: Download Meslo font and unpack into MesloLGSDZ Nerd Font folder
   become: true
   unarchive:
-    src: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Meslo.zip
+    src: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/Meslo.zip
     dest: "/usr/share/fonts/truetype/MesloLGSDZ Nerd Font"
     remote_src: yes
 ...

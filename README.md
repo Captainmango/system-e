@@ -1,6 +1,6 @@
 # System E
 
-Ansible stuff that gets a new machine set up for me. This is supposed to be my bare minimum set up (ZSH Powerline10k etc). Should not be setting up loads of language stuff.
+Ansible stuff that gets a new machine set up for me. This is supposed to be my bare minimum set up (ZSH Starship etc). Should not be setting up loads of language stuff.
 
 > Prefer working build over completeness
 
@@ -28,7 +28,7 @@ Ansible stuff that gets a new machine set up for me. This is supposed to be my b
 - [x] Set up Git and associated tools (github CLI and Git-town)
 - [x] Set up Neovim (get the tarball from latest and unzip into opt, then Symlink)
 - [ ] SSH keys maybe?
-- [ ] Move to Starship over Powerline10k
+- [x] Move to Starship over Powerline10k
 - [ ] Optional tasks
     - [ ] Bitwarden
     - [ ] Chrome
@@ -47,6 +47,7 @@ Ansible stuff that gets a new machine set up for me. This is supposed to be my b
 - ~tmux~
 - ~ohmyzsh~
 - ~powerline10k~
+- Starship
 
 
 ### Post Run Checklist

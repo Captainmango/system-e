@@ -131,6 +131,21 @@ function validate_default_shell() {
     fi
 }
 
+function validate_starship() {
+    local user="$1"
+
+    echo "Validating Starship..."
+    if ! exec_as_user "${user}" sh -c "command -v starship > /dev/null 2>&1"; then
+        echo "FAIL: starship not found"
+        return 1
+    fi
+
+    if ! exec_as_user "${user}" sh -c "starship --version > /dev/null 2>&1"; then
+        echo "FAIL: starship is not working"
+        return 1
+    fi
+}
+
 function validate_alacritty() {
     local user="$1"
 
@@ -198,6 +213,7 @@ function validate_container() {
     validate_docker_group "${user}" || failed=1
     validate_fonts "${user}" || failed=1
     validate_default_shell "${user}" || failed=1
+    validate_starship "${user}" || failed=1
     validate_alacritty "${user}" || failed=1
     validate_mise "${user}" || failed=1
     validate_neovim "${user}" || failed=1

@@ -1,7 +1,7 @@
 # Agent Context
 
 ## Project Overview
-Ansible playbooks for bootstrapping new Debian/Ubuntu machines with a minimal, opinionated environment (ZSH, Powerline10k, tmux, Docker, Neovim, fonts, base tools).
+Ansible playbooks for bootstrapping new Debian/Ubuntu machines with a minimal, opinionated environment (ZSH, Starship, tmux, Docker, Neovim, fonts, base tools).
 
 # IMPORTANT
 Never run the test-container.sh script. Ask the user to run this and provide the output. It takes too long to run in a chat session.
@@ -32,7 +32,7 @@ Never run the test-container.sh script. Ask the user to run this and provide the
 - **Target OS**: Debian/Ubuntu only (APT-based).
 - **Philosophy**: Prefer working builds over completeness, simplicity over complexity, stability over speed.
 - **Ansible style**: Use `apt` module with `become: true` for package management. Use `include_tasks` for modularity.
-- **Environment variable**: `USER` must be set. It is used by `remote.yml`, `Dockerfile.test`, `bin/test-container.sh`, and `tasks/steps/install_docker.yml` (adding user to `docker` group).
+- **Environment variable**: `USER` must be set. It is used by `remote.yml`, `Dockerfile.test`, `bin/test-container.sh`, `tasks/steps/install_docker.yml` (adding user to `docker` group), and `tasks/steps/setup_terminal.yml` (changing default shell to zsh).
 - **Architecture mapping**: Both playbooks define `arch_mapping` (`x86_64` → `amd64`, `aarch64` → `arm64`) for the Docker APT repository.
 - **Config bootstrap**: `copy_config.yml` force-clones `https://github.com/Captainmango/config-files.git` via `yadm`.
 - **Step Validation**: New steps must have a validation function in bin/test-container.sh to validate the outcome is successful.

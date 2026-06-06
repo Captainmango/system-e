@@ -5,15 +5,10 @@
     pkg:
       - zsh
 
-- name: Set SHELL to be ZSH
-  become: true
-  shell: chsh -s $(which zsh) {{ lookup('env', 'USER') }}
-
-- name: Ensure ZSH is the default shell
-  user:
-    name: "{{ lookup('env', 'USER') }}"
-    shell: "/usr/bin/zsh"
-  become: true
+- name: Ensure .zshrc exists
+  file:
+    path: ~/.zshrc
+    state: touch
 
 - name: Download Oh My Zsh installation script
   get_url:
@@ -23,16 +18,32 @@
 - name: Run Oh My Zsh installation script
   command: sh /tmp/install_ohmyzsh.sh --unattended
   register: ohmyzsh_result
-  failed_when: "'FAILED' in ohmyzsh_result.stderr"
+  failed_when: ohmyzsh_result.rc != 0 or 'FAILED' in ohmyzsh_result.stderr
 
-- name: Install Powerline10k theme
-  command: git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${HOME}/.oh-my-zsh/custom/themes/powerlevel10k
+- name: Change default shell to zsh
+  become: true
+  user:
+    name: "{{ lookup('env', 'USER') }}"
+    shell: /usr/bin/zsh
 
 - name: Set ZSH_THEME in .zshrc
   lineinfile:
     path: ~/.zshrc
     regexp: '^ZSH_THEME'
-    line: ZSH_THEME="powerlevel10k/powerlevel10k"
+    line: ZSH_THEME="robbyrussell"
+    create: yes
+
+- name: Install Starship
+  shell: curl -sS https://starship.rs/install.sh | sh -s -- -y
+  args:
+    creates: /usr/local/bin/starship
+  become: true
+
+- name: Add Starship init to .zshrc
+  lineinfile:
+    path: ~/.zshrc
+    line: 'eval "$(starship init zsh)"'
+    create: yes
 
 - name: Set EDITOR in .zshrc
   lineinfile:

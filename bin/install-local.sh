@@ -5,3 +5,4 @@ sudo apt-add-repository -y --update ppa:ansible/ansible
 sudo apt install ansible -y
 
 ansible-playbook local.yml
+./post-install.sh

@@ -1,6 +1,10 @@
-- name: Base things
+- name: Base tools
   include_tasks:
       file: ./steps/base.yml
+
+- name: Terminal
+  include_tasks:
+    file: ./steps/setup_terminal.yml
 
 - name: Copy config files
   include_tasks:
@@ -14,15 +18,11 @@
   include_tasks:
     file: ./steps/install_fonts.yml
 
-- name: Terminal
-  include_tasks:
-    file: ./steps/setup_terminal.yml
-
 - name: Install Alacritty
   include_tasks:
     file: ./steps/install_alacritty.yml
 
-- name: Install Mise and programming languages
+- name: Install Mise
   include_tasks:
     file: ./steps/install_mise.yml
 
