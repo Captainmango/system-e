@@ -6,6 +6,20 @@ identifier="$(< /dev/urandom tr -dc 'a-z0-9' | fold -w 5 | head -n 1)" ||:
 img_name="system-e-test"
 NAME="${img_name}-${identifier}"
 base_dir="$(dirname "$(readlink -f "$0")")"
+DBG_LVL="${1:-}"
+DBG=""
+
+case "${DBG_LVL}" in
+    "DEBUG")
+        DBG="-vvv"
+        ;;
+    "INFO")
+        DBG="-v"
+        ;;
+    *)
+        DBG=""
+        ;;   
+esac
 
 function setup_tempdir() {
     TEMP_DIR=$(mktemp --directory "/tmp/${NAME}".XXXXXXXX)
@@ -49,7 +63,64 @@ EOL
 
 function run_ansible_playbook() {
     ANSIBLE_CONFIG="${base_dir}/ansible.cfg"
-    ansible-playbook -i "${TEMP_INVENTORY_FILE}" -vvv "${base_dir}/../remote.yml"
+    if [[ -n "${DBG}" ]]; then
+        ansible-playbook -i "${TEMP_INVENTORY_FILE}" "${DBG}" "${base_dir}/../remote.yml"
+    else
+        ansible-playbook -i "${TEMP_INVENTORY_FILE}" "${base_dir}/../remote.yml"
+    fi
+}
+
+function validate_container() {
+    echo "Restarting container ${NAME}..."
+    docker restart "${NAME}"
+    sleep 2
+
+    local user="${USER}"
+    local failed=0
+
+    echo "Validating dotfiles..."
+    if ! docker exec "${NAME}" test -f "/home/${user}/.zshrc"; then
+        echo "FAIL: .zshrc not found"
+        failed=1
+    fi
+
+    if ! docker exec "${NAME}" test -d "/home/${user}/.local/share/yadm/repo.git"; then
+        echo "FAIL: yadm repo not found"
+        failed=1
+    fi
+
+    echo "Validating Docker group..."
+    if ! docker exec "${NAME}" sh -c "groups ${user} | grep -qw docker"; then
+        echo "FAIL: ${user} is not in the docker group"
+        failed=1
+    fi
+
+    echo "Validating fonts..."
+    if ! docker exec "${NAME}" sh -c "ls /usr/share/fonts/TTF | grep -qi meslo"; then
+        echo "FAIL: Meslo font not found in /usr/share/fonts/TTF"
+        failed=1
+    fi
+
+    echo "Validating default shell..."
+    local default_shell
+    default_shell=$(docker exec "${NAME}" getent passwd "${user}" | cut -d: -f7)
+    if [[ "${default_shell}" != "/usr/bin/zsh" ]]; then
+        echo "FAIL: Default shell is ${default_shell}, expected /usr/bin/zsh"
+        failed=1
+    fi
+
+    echo "Validating Alacritty..."
+    if ! docker exec "${NAME}" sh -c "command -v alacritty > /dev/null 2>&1"; then
+        echo "FAIL: alacritty not found"
+        failed=1
+    fi
+
+    if [[ "${failed}" -eq 1 ]]; then
+        echo "Validation FAILED"
+        return 1
+    fi
+
+    echo "Validation PASSED"
 }
 
 function cleanup() {
@@ -73,3 +144,4 @@ create_temporary_ssh_id
 start_container
 setup_test_inventory
 run_ansible_playbook
+validate_container

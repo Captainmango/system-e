@@ -2,6 +2,10 @@
   include_tasks:
       file: ./steps/base.yml
 
+- name: Copy config files
+  include_tasks:
+    file: ./steps/copy_config.yml
+
 - name: Git CLI
   include_tasks:
       file: ./steps/git-cli.yml
@@ -14,9 +18,10 @@
   include_tasks:
     file: ./steps/setup_terminal.yml
 
-- name: Copy config files
+- name: Install Alacritty
   include_tasks:
-    file: ./steps/copy_config.yml
+    file: ./steps/install_alacritty.yml
+
 
 # - name: Install Mise and programming languages
 #   include_tasks:
