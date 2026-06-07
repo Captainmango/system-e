@@ -26,7 +26,7 @@ if yadm status &>/dev/null; then
 else
   echo "No yadm repo found — cloning dotfiles..."
   yadm clone -f https://github.com/Captainmango/config-files.git
-  yadm checkout -- .
+  yadm reset HEAD --hard
   echo "Done! Dotfiles cloned successfully."
 fi
 
