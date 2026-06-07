@@ -2,6 +2,9 @@
 - name: Get config with yadm
   command: yadm clone -f https://github.com/Captainmango/config-files.git
 
+- name: Ensure files are checked out and present
+  command: yadm checkout -- .
+
 - name: Add aliases to zshrc
   lineinfile:
     path: ~/.zshrc
