@@ -3,7 +3,7 @@
   command: yadm clone -f https://github.com/Captainmango/config-files.git
 
 - name: Ensure files are checked out and present
-  command: yadm checkout -- .
+  command: yadm reset HEAD --hard
 
 - name: Add aliases to zshrc
   lineinfile:
