@@ -1,0 +1,36 @@
+---
+- name: Install required packages
+  become: true
+  apt:
+    pkg:
+      - wget
+      - gpg
+    state: present
+
+- name: Download Microsoft GPG key
+  become: true
+  ansible.builtin.get_url:
+    url: https://packages.microsoft.com/keys/microsoft.asc
+    dest: /tmp/microsoft.asc
+    mode: '0644'
+
+- name: Dearmor Microsoft GPG key
+  become: true
+  ansible.builtin.command:
+    cmd: gpg --dearmor -o /usr/share/keyrings/microsoft-archive-keyring.gpg /tmp/microsoft.asc
+    creates: /usr/share/keyrings/microsoft-archive-keyring.gpg
+
+- name: Add VSCode repository
+  become: true
+  apt_repository:
+    repo: "deb [arch=amd64,arm64,armhf signed-by=/usr/share/keyrings/microsoft-archive-keyring.gpg] https://packages.microsoft.com/repos/code stable main"
+    filename: vscode
+    state: present
+
+- name: Install VSCode
+  become: true
+  apt:
+    name: code
+    state: present
+    update_cache: true
+...

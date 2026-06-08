@@ -38,3 +38,15 @@
   include_tasks:
     file: ./steps/install_git-town.yml
 
+- name: Install VSCode
+  include_tasks:
+    file: ./steps/vscode.yml
+
+- name: Install Obsidian
+  include_tasks:
+    file: ./steps/obsidian.yml
+
+- name: Install Chrome
+  include_tasks:
+    file: ./steps/chrome.yml
+

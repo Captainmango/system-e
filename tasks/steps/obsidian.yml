@@ -1,0 +1,29 @@
+---
+- name: Install required packages
+  become: true
+  apt:
+    pkg:
+      - libgtk-3-0
+      - libnotify4
+      - libnss3
+      - libxss1
+      - libxtst6
+      - xdg-utils
+      - libatspi2.0-0
+      - libuuid1
+      - libsecret-1-0
+    state: present
+
+- name: Download Obsidian
+  become: true
+  ansible.builtin.get_url:
+    url: https://github.com/obsidianmd/obsidian-releases/releases/download/v1.6.7/obsidian_1.6.7_amd64.deb
+    dest: /tmp/obsidian.deb
+    mode: '0644'
+
+- name: Install Obsidian
+  become: true
+  ansible.builtin.apt:
+    deb: /tmp/obsidian.deb
+    state: present
+...

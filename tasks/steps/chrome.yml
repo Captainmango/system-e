@@ -1,0 +1,36 @@
+---
+- name: Install required packages
+  become: true
+  apt:
+    pkg:
+      - wget
+      - gpg
+    state: present
+
+- name: Download Google Chrome GPG key
+  become: true
+  ansible.builtin.get_url:
+    url: https://dl.google.com/linux/linux_signing_key.pub
+    dest: /tmp/google-chrome.pub
+    mode: '0644'
+
+- name: Dearmor Google Chrome GPG key
+  become: true
+  ansible.builtin.command:
+    cmd: gpg --dearmor -o /usr/share/keyrings/google-chrome-archive-keyring.gpg /tmp/google-chrome.pub
+    creates: /usr/share/keyrings/google-chrome-archive-keyring.gpg
+
+- name: Add Google Chrome repository
+  become: true
+  apt_repository:
+    repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome-archive-keyring.gpg] http://dl.google.com/linux/chrome/deb/ stable main"
+    filename: google-chrome
+    state: present
+
+- name: Install Google Chrome
+  become: true
+  apt:
+    name: google-chrome-stable
+    state: present
+    update_cache: true
+...
