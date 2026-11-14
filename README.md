@@ -22,7 +22,7 @@ This works for Debian Distros or MacOS (Apple Silicon only). Use the relevant in
 
 ### MacOS
 1. Clone the repo
-2. Install HomeBrew
+2. Install HomeBrew (optional — the playbook detects it and only runs Homebrew-backed installs when it is present; everything else installs directly)
 3. Run the install local bin script `./bin/install-local-mac.sh`
 4. Go off and do something else
 5. Check everything has run as expected
@@ -49,7 +49,7 @@ Simply run `./bin/test-container.sh` with ansible installed. It won't ask for th
 2. Run `./bin/validate-macos.sh` to check that we can establish connection
 3. run `./bin/test-macos.sh` to run the test
 
-> The docker container will utilise the processor available on the box. This will mean that for x86 cpus, the Mac will be an Intel version rather than Apple Silicon. In this case, the test will do a minimal install as a smoke test and not the full shebang. :(
+> The docker container will utilise the processor available on the box. This will mean that for x86 cpus, the Mac will be an Intel version rather than Apple Silicon. In this case, the test will do a minimal install as a smoke test and not the full shebang. :( (`bin/test-macos.sh` sets `minimal_install=true` automatically on Intel guests — override with `MINIMAL_INSTALL=true|false`.)
 
 
 ### Post Run Checklist
