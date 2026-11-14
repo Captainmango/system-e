@@ -1,0 +1,44 @@
+---
+# macOS counterpart of tasks/steps/install_docker.yml.
+# Docker on macOS is Docker Desktop: a .dmg per architecture from Docker's
+# own CDN (arch_mapping in the playbook picks the right one). There is no
+# docker group or systemd service to manage — Docker Desktop handles the
+# engine, and its CLI tools are linked into PATH when it is first launched.
+
+- name: Check whether Docker Desktop is already installed
+  stat:
+    path: /Applications/Docker.app
+  register: docker_app
+
+- name: Install Docker Desktop
+  when: not docker_app.stat.exists
+  block:
+    - name: Download the Docker Desktop dmg
+      get_url:
+        url: "https://desktop.docker.com/mac/main/{{ arch_mapping[ansible_architecture] | default(ansible_architecture) }}/Docker.dmg"
+        dest: /tmp/Docker.dmg
+        mode: '0644'
+      register: docker_download
+      retries: 3
+      delay: 5
+      until: docker_download is succeeded
+
+    - name: Mount the dmg and copy Docker.app into /Applications
+      block:
+        - name: Mount Docker.dmg
+          command: hdiutil attach /tmp/Docker.dmg -nobrowse -mountpoint /Volumes/DockerInstaller
+
+        - name: Copy Docker.app into /Applications
+          command: cp -R /Volumes/DockerInstaller/Docker.app /Applications/
+      always:
+        - name: Unmount Docker.dmg
+          command: hdiutil detach /Volumes/DockerInstaller
+          failed_when: false
+
+- name: Docker Desktop first-launch note
+  debug:
+    msg: >-
+      Docker Desktop installed. Launch it once from /Applications to accept
+      the license and let it install the docker/compose CLIs into your PATH.
+  when: not docker_app.stat.exists
+...

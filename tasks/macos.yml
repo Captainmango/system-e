@@ -1,0 +1,73 @@
+---
+# macOS counterpart of tasks/main.yml.
+#
+# Everything that can be installed directly (vendor URLs, GitHub releases)
+# is; Homebrew is only used where there is no sensible direct install and
+# only when it is actually present — ./steps/macos/homebrew.yml detects it
+# and sets the homebrew_installed fact that gates those installs, so the
+# playbook also runs clean on machines without brew (like the test VM).
+#
+# Set minimal_install: true to skip the heavy GUI apps (WezTerm, Docker
+# Desktop, VSCode, Obsidian, Chrome).
+
+- name: Homebrew detection
+  include_tasks:
+    file: ./steps/macos/homebrew.yml
+
+- name: Base tools
+  include_tasks:
+    file: ./steps/macos/base.yml
+
+- name: Terminal
+  include_tasks:
+    file: ./steps/macos/setup_terminal.yml
+
+- name: Copy config files
+  include_tasks:
+    file: ./steps/macos/copy_config.yml
+
+- name: Git CLI
+  include_tasks:
+    file: ./steps/macos/git-cli.yml
+
+- name: Fonts
+  include_tasks:
+    file: ./steps/macos/install_fonts.yml
+
+- name: Install WezTerm
+  include_tasks:
+    file: ./steps/macos/install_wezterm.yml
+  when: not (minimal_install | default(false) | bool)
+
+- name: Install Mise
+  include_tasks:
+    file: ./steps/macos/install_mise.yml
+
+- name: Install Docker
+  include_tasks:
+    file: ./steps/macos/install_docker.yml
+  when: not (minimal_install | default(false) | bool)
+
+- name: Install Neovim
+  include_tasks:
+    file: ./steps/macos/neovim.yml
+
+- name: Install Git Town
+  include_tasks:
+    file: ./steps/macos/install_git-town.yml
+
+- name: Install VSCode
+  include_tasks:
+    file: ./steps/macos/vscode.yml
+  when: not (minimal_install | default(false) | bool)
+
+- name: Install Obsidian
+  include_tasks:
+    file: ./steps/macos/obsidian.yml
+  when: not (minimal_install | default(false) | bool)
+
+- name: Install Chrome
+  include_tasks:
+    file: ./steps/macos/chrome.yml
+  when: not (minimal_install | default(false) | bool)
+...

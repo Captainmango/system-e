@@ -1,0 +1,44 @@
+---
+# Homebrew detection.
+#
+# Installs that genuinely need Homebrew are gated on the homebrew_installed
+# fact set here, so the playbook also runs on machines without brew (like the
+# test VM): those steps are skipped instead of failing. Everything else in the
+# macOS steps installs directly, without brew.
+#
+# The community.general.homebrew module comes from the community.general
+# collection. Make sure it is installed first:
+#   ansible-galaxy collection install -r requirements.yml
+# (bin/install-local-mac.sh and bin/test-macos.sh do this for you.)
+
+- name: Look for Homebrew at the Apple Silicon prefix
+  stat:
+    path: /opt/homebrew/bin/brew
+  register: homebrew_arm
+
+- name: Look for Homebrew at the Intel prefix
+  stat:
+    path: /usr/local/bin/brew
+  register: homebrew_intel
+
+- name: Record whether Homebrew is installed
+  set_fact:
+    homebrew_installed: "{{ homebrew_arm.stat.exists or homebrew_intel.stat.exists }}"
+    homebrew_prefix: "{{ '/opt/homebrew' if homebrew_arm.stat.exists else ('/usr/local' if homebrew_intel.stat.exists else '') }}"
+
+- name: Report Homebrew status
+  debug:
+    msg: >-
+      {{ 'Homebrew found at ' ~ homebrew_prefix ~ ' — Homebrew-backed installs will run.'
+         if homebrew_installed | bool else
+         'Homebrew not found — Homebrew-backed installs (tmux, wget) will be skipped. Install it from https://brew.sh if you want them.' }}
+
+- name: Install Homebrew-only formulae (tmux, wget)
+  community.general.homebrew:
+    name:
+      - tmux
+      - wget
+    state: present
+    path: "{{ homebrew_prefix }}/bin"
+  when: homebrew_installed | bool
+...

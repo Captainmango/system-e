@@ -1,0 +1,15 @@
+---
+# macOS counterpart of tasks/steps/install_fonts.yml.
+# Fonts go into the user's ~/Library/Fonts directory — no sudo needed.
+
+- name: Ensure user Fonts directory exists
+  file:
+    path: ~/Library/Fonts
+    state: directory
+
+- name: Download Meslo font and unpack into ~/Library/Fonts
+  unarchive:
+    src: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/Meslo.zip
+    dest: ~/Library/Fonts
+    remote_src: yes
+...

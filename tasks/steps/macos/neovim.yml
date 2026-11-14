@@ -1,0 +1,33 @@
+---
+# macOS counterpart of tasks/steps/neovim.yml.
+# Same pinned release, macOS asset names (nvim-macos-arm64 / nvim-macos-x86_64).
+# Unpacked under ~/.local with the binary symlinked into ~/.local/bin (already
+# on PATH via .zprofile), so no sudo is needed.
+
+- name: Set the Neovim macOS asset name
+  set_fact:
+    nvim_asset: "{{ 'nvim-macos-x86_64' if ansible_architecture == 'x86_64' else 'nvim-macos-arm64' }}"
+
+- name: Ensure ~/.local exists
+  file:
+    path: ~/.local
+    state: directory
+
+- name: Download Neovim and unpack
+  unarchive:
+    src: "https://github.com/neovim/neovim/releases/download/v0.12.1/{{ nvim_asset }}.tar.gz"
+    dest: ~/.local
+    remote_src: yes
+
+- name: Symlink nvim into ~/.local/bin
+  file:
+    src: "{{ ansible_env.HOME }}/.local/{{ nvim_asset }}/bin/nvim"
+    dest: ~/.local/bin/nvim
+    state: link
+
+- name: Add nvim bin to PATH
+  lineinfile:
+    path: ~/.zshrc
+    line: 'export PATH="$PATH:{{ ansible_env.HOME }}/.local/{{ nvim_asset }}/bin"'
+    create: yes
+...

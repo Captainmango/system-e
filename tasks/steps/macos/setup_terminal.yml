@@ -1,0 +1,63 @@
+---
+# macOS counterpart of tasks/steps/setup_terminal.yml.
+# zsh ships with macOS (/bin/zsh), so there is nothing to install — only
+# Oh My Zsh, Starship and the .zshrc/.zprofile wiring.
+
+- name: Check zsh is present
+  command: /bin/zsh --version
+  changed_when: false
+
+- name: Ensure .zshrc exists
+  file:
+    path: ~/.zshrc
+    state: touch
+
+- name: Download Oh My Zsh installation script
+  get_url:
+    url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+    dest: /tmp/install_ohmyzsh.sh
+    mode: '0755'
+
+- name: Run Oh My Zsh installation script
+  command: sh /tmp/install_ohmyzsh.sh --unattended
+  args:
+    creates: ~/.oh-my-zsh
+  register: ohmyzsh_result
+  failed_when: ohmyzsh_result.rc | default(0) != 0 or 'FAILED' in (ohmyzsh_result.stderr | default(''))
+
+- name: Read the current default shell
+  command: dscl . -read /Users/{{ ansible_user_id }} UserShell
+  register: current_shell
+  changed_when: false
+
+- name: Change default shell to zsh (only if it isn't already)
+  become: true
+  command: chsh -s /bin/zsh {{ ansible_user_id }}
+  when: "'/bin/zsh' not in current_shell.stdout"
+
+- name: Set ZSH_THEME in .zshrc
+  lineinfile:
+    path: ~/.zshrc
+    regexp: '^ZSH_THEME'
+    line: ZSH_THEME="robbyrussell"
+    create: yes
+
+- name: Install Starship into ~/.local/bin (no sudo needed)
+  shell: curl -sS https://starship.rs/install.sh | sh -s -- -y
+  args:
+    creates: ~/.local/bin/starship
+  environment:
+    INSTALL_PATH: "{{ ansible_env.HOME }}/.local/bin"
+
+- name: Add Starship init to .zshrc
+  lineinfile:
+    path: ~/.zshrc
+    line: 'eval "$(starship init zsh)"'
+    create: yes
+
+- name: Set EDITOR in .zshrc
+  lineinfile:
+    path: ~/.zshrc
+    line: export EDITOR=nvim
+    create: yes
+...

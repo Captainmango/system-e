@@ -1,0 +1,42 @@
+---
+# macOS counterpart of tasks/steps/git-cli.yml.
+# No apt repo needed: the GitHub CLI publishes a macOS zip on every release.
+# The binary goes into ~/.local/bin (on PATH via .zprofile), so no sudo.
+
+- name: Get latest GitHub CLI release info
+  uri:
+    url: https://api.github.com/repos/cli/cli/releases/latest
+    return_content: yes
+  register: gh_release
+  retries: 3
+  delay: 5
+  until: gh_release is succeeded
+
+- name: Set GitHub CLI version and architecture suffix
+  set_fact:
+    gh_version: "{{ gh_release.json.tag_name | regex_replace('^v', '') }}"
+    gh_arch: "{{ 'amd64' if ansible_architecture == 'x86_64' else 'arm64' }}"
+
+- name: Download GitHub CLI macOS zip
+  get_url:
+    url: "https://github.com/cli/cli/releases/download/{{ gh_release.json.tag_name }}/gh_{{ gh_version }}_macOS_{{ gh_arch }}.zip"
+    dest: "/tmp/gh_{{ gh_version }}_macOS_{{ gh_arch }}.zip"
+    mode: '0644'
+  register: gh_download
+  retries: 3
+  delay: 5
+  until: gh_download is succeeded
+
+- name: Unpack GitHub CLI
+  unarchive:
+    src: "/tmp/gh_{{ gh_version }}_macOS_{{ gh_arch }}.zip"
+    dest: /tmp
+    remote_src: yes
+
+- name: Install the gh binary
+  copy:
+    src: "/tmp/gh_{{ gh_version }}_macOS_{{ gh_arch }}/bin/gh"
+    dest: ~/.local/bin/gh
+    mode: '0755'
+    remote_src: yes
+...

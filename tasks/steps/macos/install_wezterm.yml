@@ -1,0 +1,52 @@
+---
+# macOS counterpart of tasks/steps/install_wezterm.yml.
+# WezTerm publishes a macOS zip containing WezTerm.app on every release.
+# Admin users can write to /Applications, so no sudo is needed.
+
+- name: Get latest WezTerm release info
+  uri:
+    url: https://api.github.com/repos/wez/wezterm/releases/latest
+    return_content: yes
+    follow_redirects: all
+  register: wezterm_release
+  retries: 3
+  delay: 5
+  until: wezterm_release is succeeded
+
+- name: Find the macOS zip asset
+  set_fact:
+    wezterm_zip_url: >-
+      {{ wezterm_release.json.assets
+         | selectattr('name', 'match', '^WezTerm-mac[oO][sS]-.*\.zip$')
+         | map(attribute='browser_download_url') | first }}
+
+- name: Check whether WezTerm is already installed
+  stat:
+    path: /Applications/WezTerm.app
+  register: wezterm_app
+
+- name: Install WezTerm
+  when: not wezterm_app.stat.exists
+  block:
+    - name: Download the WezTerm macOS zip
+      get_url:
+        url: "{{ wezterm_zip_url }}"
+        dest: /tmp/wezterm-macos.zip
+        mode: '0644'
+      register: wezterm_download
+      retries: 3
+      delay: 5
+      until: wezterm_download is succeeded
+
+    - name: Unpack WezTerm.app into /Applications
+      unarchive:
+        src: /tmp/wezterm-macos.zip
+        dest: /Applications
+        remote_src: yes
+
+- name: Symlink the wezterm CLI into ~/.local/bin
+  file:
+    src: /Applications/WezTerm.app/Contents/MacOS/wezterm
+    dest: ~/.local/bin/wezterm
+    state: link
+...

@@ -1,0 +1,78 @@
+---
+# macOS counterpart of tasks/steps/base.yml.
+#
+# git/curl/unzip/tar ship with macOS (git via the Xcode Command Line Tools),
+# so most of the Linux apt list is already covered. tmux and wget have no
+# sensible direct install and are handled by homebrew.yml when brew exists.
+# yadm is a single shell script and is fetched directly — no brew needed.
+
+- name: Check for Xcode Command Line Tools
+  command: xcode-select -p
+  register: clt_check
+  failed_when: false
+  changed_when: false
+
+- name: Install Xcode Command Line Tools (git, make, clang, ...)
+  when: clt_check.rc != 0
+  become: true
+  block:
+    - name: Make softwareupdate list the Command Line Tools
+      file:
+        path: /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
+        state: touch
+
+    - name: Find the Command Line Tools package label
+      shell: >
+        set -o pipefail;
+        softwareupdate --list 2>&1
+        | grep -F 'Label:' | grep -F 'Command Line Tools'
+        | sed 's/^[[:space:]]*Label: //' | sort -V | tail -n 1
+      register: clt_label
+      changed_when: false
+
+    - name: Fail if no Command Line Tools package was found
+      fail:
+        msg: >-
+          Could not find a Command Line Tools package via softwareupdate.
+          Run 'xcode-select --install' manually, then re-run the playbook.
+      when: clt_label.stdout | length == 0
+
+    - name: Install the Command Line Tools (can take several minutes)
+      command: softwareupdate --install "{{ clt_label.stdout }}" --verbose
+
+    - name: Remove the softwareupdate trigger file
+      file:
+        path: /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
+        state: absent
+
+- name: Ensure ~/.local/bin exists (direct-installed tools live here)
+  file:
+    path: ~/.local/bin
+    state: directory
+    mode: '0755'
+
+- name: Install yadm (single script, no package manager needed)
+  get_url:
+    url: https://raw.githubusercontent.com/TheLocehiliosan/yadm/master/yadm
+    dest: ~/.local/bin/yadm
+    mode: '0755'
+
+- name: Ensure ~/.local/bin is on PATH
+  lineinfile:
+    path: ~/.zprofile
+    line: 'export PATH="$HOME/.local/bin:$PATH"'
+    create: yes
+
+- name: Probe whether sshd (Remote Login) is already listening
+  wait_for:
+    host: 127.0.0.1
+    port: 22
+    timeout: 3
+  register: sshd_probe
+  failed_when: false
+
+- name: Enable Remote Login (macOS equivalent of openssh-server)
+  become: true
+  command: systemsetup -setremotelogin on
+  when: sshd_probe.failed | default(false)
+...

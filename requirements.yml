@@ -1,0 +1,6 @@
+---
+# Ansible collections needed by the playbooks.
+# Install with: ansible-galaxy collection install -r requirements.yml
+collections:
+  - name: community.general # provides the homebrew module used by tasks/steps/macos/homebrew.yml
+...

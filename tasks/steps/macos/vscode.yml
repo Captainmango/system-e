@@ -1,0 +1,36 @@
+---
+# macOS counterpart of tasks/steps/vscode.yml.
+# VSCode publishes a universal macOS zip at a stable URL — no repo, no brew.
+# The .app goes into /Applications (admin-writable) and the `code` CLI is
+# symlinked into ~/.local/bin.
+
+- name: Check whether Visual Studio Code is already installed
+  stat:
+    path: /Applications/Visual Studio Code.app
+  register: vscode_app
+
+- name: Install VSCode
+  when: not vscode_app.stat.exists
+  block:
+    - name: Download VSCode (universal build)
+      get_url:
+        url: https://update.code.visualstudio.com/latest/darwin-universal/stable
+        dest: /tmp/vscode.zip
+        mode: '0644'
+      register: vscode_download
+      retries: 3
+      delay: 5
+      until: vscode_download is succeeded
+
+    - name: Unpack Visual Studio Code.app into /Applications
+      unarchive:
+        src: /tmp/vscode.zip
+        dest: /Applications
+        remote_src: yes
+
+- name: Symlink the code CLI into ~/.local/bin
+  file:
+    src: /Applications/Visual Studio Code.app/Contents/Resources/app/bin/code
+    dest: ~/.local/bin/code
+    state: link
+...

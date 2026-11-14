@@ -1,0 +1,51 @@
+---
+# macOS counterpart of tasks/steps/obsidian.yml.
+# Obsidian publishes a universal macOS .dmg on its GitHub releases — mount it,
+# copy the .app into /Applications, unmount. No brew needed.
+
+- name: Check whether Obsidian is already installed
+  stat:
+    path: /Applications/Obsidian.app
+  register: obsidian_app
+
+- name: Install Obsidian
+  when: not obsidian_app.stat.exists
+  block:
+    - name: Get latest Obsidian release info
+      uri:
+        url: https://api.github.com/repos/obsidianmd/obsidian-releases/releases/latest
+        return_content: yes
+      register: obsidian_release
+      retries: 3
+      delay: 5
+      until: obsidian_release is succeeded
+
+    - name: Find the macOS dmg asset
+      set_fact:
+        obsidian_dmg_url: >-
+          {{ obsidian_release.json.assets
+             | selectattr('name', 'match', '^Obsidian-.*\.dmg$')
+             | map(attribute='browser_download_url') | first }}
+
+    - name: Download the Obsidian dmg
+      get_url:
+        url: "{{ obsidian_dmg_url }}"
+        dest: /tmp/Obsidian.dmg
+        mode: '0644'
+      register: obsidian_download
+      retries: 3
+      delay: 5
+      until: obsidian_download is succeeded
+
+    - name: Mount the dmg and copy Obsidian.app into /Applications
+      block:
+        - name: Mount Obsidian.dmg
+          command: hdiutil attach /tmp/Obsidian.dmg -nobrowse -mountpoint /Volumes/ObsidianInstaller
+
+        - name: Copy Obsidian.app into /Applications
+          command: cp -R /Volumes/ObsidianInstaller/Obsidian.app /Applications/
+      always:
+        - name: Unmount Obsidian.dmg
+          command: hdiutil detach /Volumes/ObsidianInstaller
+          failed_when: false
+...

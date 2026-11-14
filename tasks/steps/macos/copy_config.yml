@@ -1,0 +1,20 @@
+---
+# macOS counterpart of tasks/steps/copy_config.yml.
+# Same as the Linux one, except yadm was installed into ~/.local/bin by
+# base.yml rather than via apt, so it is called by full path (Ansible tasks
+# do not see the .zprofile PATH).
+
+- name: Get config with yadm
+  command: ~/.local/bin/yadm clone -f https://github.com/Captainmango/config-files.git
+  args:
+    creates: ~/.local/share/yadm/repo.git
+
+- name: Ensure files are checked out and present
+  command: ~/.local/bin/yadm reset HEAD --hard
+
+- name: Add aliases to zshrc
+  lineinfile:
+    path: ~/.zshrc
+    line: source ~/.zsh_aliases
+    create: yes
+...

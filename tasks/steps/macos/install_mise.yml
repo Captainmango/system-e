@@ -1,0 +1,18 @@
+---
+# macOS counterpart of tasks/steps/install_mise.yml.
+# Same install script, but installed user-local into ~/.local/bin (already on
+# PATH via .zprofile) so no sudo is needed.
+
+- name: Download Mise install script
+  get_url:
+    url: https://mise.run
+    dest: /tmp/mise_install.sh
+    mode: '0755'
+
+- name: Run Mise installation script
+  command: sh /tmp/mise_install.sh
+  args:
+    creates: ~/.local/bin/mise
+  environment:
+    MISE_INSTALL_PATH: "{{ ansible_env.HOME }}/.local/bin/mise"
+...
