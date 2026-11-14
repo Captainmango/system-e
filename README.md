@@ -10,7 +10,7 @@ Ansible stuff that gets a new machine set up for me. This is supposed to be my b
 
 ## Usage
 
-This works for Debian Distros or MacOS. Use the relevant instructions.
+This works for Debian Distros or MacOS (Apple Silicon only). Use the relevant instructions.
 
 ### Debian
 1. Clone the repo
@@ -19,6 +19,19 @@ This works for Debian Distros or MacOS. Use the relevant instructions.
 4. Go off and do something else (If TZInfo isn't installed, the script will ask for this.)
 5. Check everything has run as expected
 6. Install Git Town https://www.git-town.com/install
+
+### MacOS
+1. Clone the repo
+2. Install HomeBrew
+3. Run the install local bin script `./bin/install-local-mac.sh`
+4. Go off and do something else
+5. Check everything has run as expected
+6. Install Git Town https://www.git-town.com/install
+
+## Testing
+
+### Debian
+Simply run `./bin/test-container.sh` with ansible installed. It won't ask for the become password as it's not needed in the container.
 
 ### MacOS
 1. Run `docker compose up -d` to start the Mac Docker VM
@@ -33,46 +46,16 @@ This works for Debian Distros or MacOS. Use the relevant instructions.
     i. When the Migration Assistant wants to transfer data, select Not now (bottom left).
     j. On the Apple ID screen, select Set Up Later (bottom left) and then proceed using Skip.
     k. On the Create a Computer Account screen, fill in a username and password and Continue.
+2. Run `./bin/validate-macos.sh` to check that we can establish connection
+3. run `./bin/test-macos.sh` to run the test
 
-
-
-## Todo list
-- [x] Set up Ansible playbooks in tasks folder
-- [x] Set up test bed with Docker
-- [x] Create task for installing the font (MesloLGS)
-- [x] Create task for installing basic deps
-- [x] Create task for porting configurations
-- [x] Create task for installing languages using Mise
-- [x] Add Docker and sudo group for Docker
-- [x] Set up scheduled testing using Github Actions (run weekly or monthly)
-- [x] Set up Git and associated tools (github CLI and Git-town)
-- [x] Set up Neovim (get the tarball from latest and unzip into opt, then Symlink)
-- [ ] SSH keys maybe?
-- [x] Move to Starship over Powerline10k
-- [ ] Optional tasks
-    - [ ] Bitwarden
-    - [x] Chrome
-    - [x] Obsidian + vaults
-
-
-### basic deps
-- ~git~
-- ~docker (with usergroup to not need sudo)~
-- ~c-utils (build-essentials)~
-- ~curl~
-- ~git cli~
-- ~git-town~
-- ~portainer~
-- ~tmux~
-- ~ohmyzsh~
-- ~powerline10k~
-- ~Starship~
+> The docker container will utilise the processor available on the box. This will mean that for x86 cpus, the Mac will be an Intel version rather than Apple Silicon. In this case, the test will do a minimal install as a smoke test and not the full shebang. :(
 
 
 ### Post Run Checklist
-- [ ] Create an SSH key for Git and anything else as well while you're at it and add it to the ssh server
+- [ ] Create an SSH key for Git and anything else as well while you're at it and add it to the ssh client
 - [ ] Copy config using yadm `sudo yadm pull -f [config repo thing here]`
 - [ ] Check path is set up
-- [ ] Make sure SystemD daemon is reloaded
-- [ ] Make sure Mise is set up right so we can install languages
+- [ ] Make sure SystemD daemon is reloaded for Docker
+- [ ] Make sure Mise is set up right so we can install languages (use `mise doctor`)
 
