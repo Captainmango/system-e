@@ -10,5 +10,7 @@
       - unzip
       - yadm
       - openssh-server
+      - ca-certificates
+      - gnupg
     state: latest
 ...

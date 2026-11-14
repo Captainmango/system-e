@@ -156,6 +156,21 @@ function validate_alacritty() {
     fi
 }
 
+function validate_wezterm() {
+    local user="$1"
+
+    echo "Validating WezTerm..."
+    if ! exec_as_user "${user}" sh -c "command -v wezterm > /dev/null 2>&1"; then
+        echo "FAIL: wezterm not found"
+        return 1
+    fi
+
+    if ! exec_as_user "${user}" sh -c "wezterm --version > /dev/null 2>&1"; then
+        echo "FAIL: wezterm is not working"
+        return 1
+    fi
+}
+
 function validate_mise() {
     local user="$1"
 
@@ -214,7 +229,7 @@ function validate_container() {
     validate_fonts "${user}" || failed=1
     validate_default_shell "${user}" || failed=1
     validate_starship "${user}" || failed=1
-    validate_alacritty "${user}" || failed=1
+    validate_wezterm "${user}" || failed=1
     validate_mise "${user}" || failed=1
     validate_neovim "${user}" || failed=1
     validate_git_town "${user}" || failed=1

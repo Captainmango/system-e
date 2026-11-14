@@ -18,9 +18,9 @@
   include_tasks:
     file: ./steps/install_fonts.yml
 
-- name: Install Alacritty
+- name: Install WezTerm
   include_tasks:
-    file: ./steps/install_alacritty.yml
+    file: ./steps/install_wezterm.yml
 
 - name: Install Mise
   include_tasks:
