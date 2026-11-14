@@ -1,5 +1,5 @@
 ---
-# macOS counterpart of tasks/steps/git-cli.yml.
+# macOS counterpart of tasks/steps/debian/git-cli.yml.
 # No apt repo needed: the GitHub CLI publishes a macOS zip on every release.
 # The binary goes into ~/.local/bin (on PATH via .zprofile), so no sudo.
 

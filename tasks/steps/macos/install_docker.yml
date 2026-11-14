@@ -1,5 +1,5 @@
 ---
-# macOS counterpart of tasks/steps/install_docker.yml.
+# macOS counterpart of tasks/steps/debian/install_docker.yml.
 # Docker on macOS is Docker Desktop: a .dmg per architecture from Docker's
 # own CDN (arch_mapping in the playbook picks the right one). There is no
 # docker group or systemd service to manage — Docker Desktop handles the

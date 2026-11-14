@@ -13,4 +13,4 @@
   tasks:
     - name: Steps
       include_tasks:
-        file: tasks/main.yml
+        file: ../../tasks/debian.yml

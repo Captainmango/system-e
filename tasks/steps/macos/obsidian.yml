@@ -1,5 +1,5 @@
 ---
-# macOS counterpart of tasks/steps/obsidian.yml.
+# macOS counterpart of tasks/steps/debian/obsidian.yml.
 # Obsidian publishes a universal macOS .dmg on its GitHub releases — mount it,
 # copy the .app into /Applications, unmount. No brew needed.
 

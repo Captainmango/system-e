@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# macOS equivalent of bin/post-install.sh.
+# macOS equivalent of bin/debian/post-install.sh.
 # The docker group and systemd bits don't apply on macOS (Docker Desktop runs
 # its own VM), so this only covers the shell and dotfiles.
 

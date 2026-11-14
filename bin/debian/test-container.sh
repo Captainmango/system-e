@@ -5,7 +5,7 @@ set -euo pipefail
 identifier="$(< /dev/urandom tr -dc 'a-z0-9' | fold -w 5 | head -n 1)" ||:
 img_name="system-e-test"
 NAME="${img_name}-${identifier}"
-base_dir="$(dirname "$(readlink -f "$0")")"
+base_dir="$(cd "$(dirname "$(readlink -f "$0")")/../.." && pwd)"
 DBG_LVL="${1:-}"
 DBG=""
 
@@ -37,7 +37,7 @@ function create_temporary_ssh_id() {
 function start_container() {
     docker build --tag "${img_name}" \
         --build-arg USER \
-        --file "${base_dir}/../Dockerfile.test" \
+        --file "${base_dir}/Dockerfile.test" \
         "${TEMP_DIR}"
 
     docker run -d -P --name "${NAME}" "${img_name}"
@@ -62,11 +62,11 @@ EOL
 }
 
 function run_ansible_playbook() {
-    ANSIBLE_CONFIG="${base_dir}/ansible.cfg"
+    export ANSIBLE_CONFIG="${base_dir}/ansible.cfg"
     if [[ -n "${DBG}" ]]; then
-        ansible-playbook -i "${TEMP_INVENTORY_FILE}" "${DBG}" "${base_dir}/../remote.yml"
+        ansible-playbook -i "${TEMP_INVENTORY_FILE}" "${DBG}" "${base_dir}/playbooks/debian/remote.yml"
     else
-        ansible-playbook -i "${TEMP_INVENTORY_FILE}" "${base_dir}/../remote.yml"
+        ansible-playbook -i "${TEMP_INVENTORY_FILE}" "${base_dir}/playbooks/debian/remote.yml"
     fi
 }
 

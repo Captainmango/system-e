@@ -1,52 +1,51 @@
 - name: Base tools
   include_tasks:
-      file: ./steps/base.yml
+      file: ./steps/debian/base.yml
 
 - name: Terminal
   include_tasks:
-    file: ./steps/setup_terminal.yml
+    file: ./steps/debian/setup_terminal.yml
 
 - name: Copy config files
   include_tasks:
-    file: ./steps/copy_config.yml
+    file: ./steps/debian/copy_config.yml
 
 - name: Git CLI
   include_tasks:
-      file: ./steps/git-cli.yml
+      file: ./steps/debian/git-cli.yml
 
 - name: Fonts
   include_tasks:
-    file: ./steps/install_fonts.yml
+    file: ./steps/debian/install_fonts.yml
 
 - name: Install WezTerm
   include_tasks:
-    file: ./steps/install_wezterm.yml
+    file: ./steps/debian/install_wezterm.yml
 
 - name: Install Mise
   include_tasks:
-    file: ./steps/install_mise.yml
+    file: ./steps/debian/install_mise.yml
 
 - name: Install Docker and add Docker Group
   include_tasks:
-    file: ./steps/install_docker.yml
+    file: ./steps/debian/install_docker.yml
 
 - name: Install Neovim
   include_tasks:
-    file: ./steps/neovim.yml
+    file: ./steps/debian/neovim.yml
 
 - name: Install Git Town
   include_tasks:
-    file: ./steps/install_git-town.yml
+    file: ./steps/debian/install_git-town.yml
 
 - name: Install VSCode
   include_tasks:
-    file: ./steps/vscode.yml
+    file: ./steps/debian/vscode.yml
 
 - name: Install Obsidian
   include_tasks:
-    file: ./steps/obsidian.yml
+    file: ./steps/debian/obsidian.yml
 
 - name: Install Chrome
   include_tasks:
-    file: ./steps/chrome.yml
-
+    file: ./steps/debian/chrome.yml

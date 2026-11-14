@@ -1,5 +1,5 @@
 ---
-# macOS counterpart of tasks/steps/install_mise.yml.
+# macOS counterpart of tasks/steps/debian/install_mise.yml.
 # Same install script, but installed user-local into ~/.local/bin (already on
 # PATH via .zprofile) so no sudo is needed.
 

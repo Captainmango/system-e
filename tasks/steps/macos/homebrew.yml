@@ -9,7 +9,7 @@
 # The community.general.homebrew module comes from the community.general
 # collection. Make sure it is installed first:
 #   ansible-galaxy collection install -r requirements.yml
-# (bin/install-local-mac.sh and bin/test-macos.sh do this for you.)
+# (bin/macos/install-local.sh and bin/macos/test-vm.sh do this for you.)
 
 - name: Look for Homebrew at the Apple Silicon prefix
   stat:

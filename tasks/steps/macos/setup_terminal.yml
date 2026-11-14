@@ -1,5 +1,5 @@
 ---
-# macOS counterpart of tasks/steps/setup_terminal.yml.
+# macOS counterpart of tasks/steps/debian/setup_terminal.yml.
 # zsh ships with macOS (/bin/zsh), so there is nothing to install — only
 # Oh My Zsh, Starship and the .zshrc/.zprofile wiring.
 

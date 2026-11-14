@@ -1,5 +1,5 @@
 ---
-# macOS counterpart of tasks/steps/install_git-town.yml.
+# macOS counterpart of tasks/steps/debian/install_git-town.yml.
 # Same GitHub-release flow, but the macOS tarball (intel_64 / arm_64) holds a
 # plain binary — no .deb to unpack. Installed into ~/.local/bin (already on
 # PATH via .zprofile), so no sudo is needed.

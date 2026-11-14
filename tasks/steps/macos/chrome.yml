@@ -1,5 +1,5 @@
 ---
-# macOS counterpart of tasks/steps/chrome.yml.
+# macOS counterpart of tasks/steps/debian/chrome.yml.
 # Google publishes a universal macOS Chrome .dmg at a stable URL — mount it,
 # copy the .app into /Applications, unmount. No brew needed.
 

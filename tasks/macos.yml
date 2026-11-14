@@ -1,5 +1,5 @@
 ---
-# macOS counterpart of tasks/main.yml.
+# macOS counterpart of tasks/debian.yml.
 #
 # Everything that can be installed directly (vendor URLs, GitHub releases)
 # is; Homebrew is only used where there is no sensible direct install and

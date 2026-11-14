@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 #
-# macOS equivalent of bin/install-local.sh.
+# macOS equivalent of bin/debian/install-local.sh.
 # HomeBrew is OPTIONAL: the playbook detects it (tasks/steps/macos/homebrew.yml)
 # and only runs Homebrew-backed installs when it is present. Everything else is
 # installed directly.
 
 set -euo pipefail
 
-base_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+base_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "${base_dir}"
 
 # git/curl/make/python3 come from the Xcode Command Line Tools.
@@ -34,5 +34,5 @@ fi
 # community.general collection — make sure it is installed.
 ansible-galaxy collection install -r requirements.yml
 
-ansible-playbook local-mac.yml --ask-become-pass
-./bin/post-install-mac.sh
+ansible-playbook playbooks/macos/local.yml --ask-become-pass
+./bin/macos/post-install.sh

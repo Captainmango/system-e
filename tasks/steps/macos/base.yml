@@ -1,5 +1,5 @@
 ---
-# macOS counterpart of tasks/steps/base.yml.
+# macOS counterpart of tasks/steps/debian/base.yml.
 #
 # git/curl/unzip/tar ship with macOS (git via the Xcode Command Line Tools),
 # so most of the Linux apt list is already covered. tmux and wget have no

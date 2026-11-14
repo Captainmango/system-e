@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 #
-# macOS equivalent of bin/test-container.sh.
+# macOS equivalent of bin/debian/test-container.sh.
 #
-# Runs remote-mac.yml against the macOS VM from docker-compose.yml and
-# validates each step over SSH. Start the VM and install macOS first (see
-# README → Testing → MacOS); bin/validate-macos.sh checks connectivity.
+# Runs playbooks/macos/remote.yml against the macOS VM from docker-compose.yml
+# and validates each step over SSH. Start the VM and install macOS first (see
+# README → Testing → MacOS); bin/macos/validate-vm.sh checks connectivity.
 #
 # Per the README, an Intel (x86_64) VM only gets a minimal smoke-test install
 # (no heavy GUI apps). Override with MINIMAL_INSTALL=true|false.
@@ -16,7 +16,7 @@ set -euo pipefail
 
 identifier="$(< /dev/urandom tr -dc 'a-z0-9' | fold -w 5 | head -n 1)" ||:
 NAME="macos"
-base_dir="$(dirname "$(readlink -f "$0")")"
+base_dir="$(cd "$(dirname "$(readlink -f "$0")")/../.." && pwd)"
 DBG_LVL="${1:-}"
 DBG=""
 
@@ -54,7 +54,7 @@ function create_temporary_ssh_id() {
 function ensure_container() {
     if ! docker ps --format '{{.Names}}' | grep -qx "${NAME}"; then
         echo "Container ${NAME} is not running, starting it..."
-        docker compose --file "${base_dir}/../docker-compose.yml" up -d "${NAME}"
+        docker compose --file "${base_dir}/docker-compose.yml" up -d "${NAME}"
     fi
 }
 
@@ -143,13 +143,13 @@ function detect_arch_and_mode() {
 }
 
 function run_ansible_playbook() {
-    export ANSIBLE_CONFIG="${base_dir}/../ansible.cfg"
+    export ANSIBLE_CONFIG="${base_dir}/ansible.cfg"
 
     # The Homebrew module (community.general.homebrew) comes from the
     # community.general collection.
-    ansible-galaxy collection install -r "${base_dir}/../requirements.yml"
+    ansible-galaxy collection install -r "${base_dir}/requirements.yml"
 
-    echo "Running remote-mac.yml against the macOS guest..."
+    echo "Running playbooks/macos/remote.yml against the macOS guest..."
     # The macOS tasks avoid sudo: become is only needed if the Command Line
     # Tools are missing, Remote Login is off, or the shell isn't zsh yet —
     # none of which apply to an already-reachable VM.
@@ -157,7 +157,7 @@ function run_ansible_playbook() {
     ansible-playbook -i "${TEMP_INVENTORY_FILE}" \
         -e "minimal_install=${MINIMAL}" \
         ${DBG} \
-        "${base_dir}/../remote-mac.yml"
+        "${base_dir}/playbooks/macos/remote.yml"
 }
 
 function validate_dotfiles() {

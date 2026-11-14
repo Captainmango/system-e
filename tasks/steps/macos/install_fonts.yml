@@ -1,5 +1,5 @@
 ---
-# macOS counterpart of tasks/steps/install_fonts.yml.
+# macOS counterpart of tasks/steps/debian/install_fonts.yml.
 # Fonts go into the user's ~/Library/Fonts directory — no sudo needed.
 
 - name: Ensure user Fonts directory exists

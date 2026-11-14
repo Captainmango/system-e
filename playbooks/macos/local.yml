@@ -1,15 +1,14 @@
-- name: Set up a macOS machine (remote over SSH)
-  hosts: mac
-  user: "{{ ansible_user | default(lookup('env', 'USER')) }}"
+- name: Set up a macOS machine (local)
+  hosts: localhost
   vars:
     arch_mapping: # For the Docker Desktop download so arch is right
       x86_64: amd64
       arm64: arm64
     # Skip the heavy GUI apps (WezTerm, Docker Desktop, VSCode, Obsidian,
-    # Chrome) for a fast smoke test. bin/test-macos.sh sets this to true on
+    # Chrome) for a fast smoke test. bin/macos/test-vm.sh sets this to true on
     # the Intel test VM.
     minimal_install: false
   tasks:
     - name: Steps
       include_tasks:
-        file: tasks/macos.yml
+        file: ../../tasks/macos.yml

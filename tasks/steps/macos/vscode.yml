@@ -1,5 +1,5 @@
 ---
-# macOS counterpart of tasks/steps/vscode.yml.
+# macOS counterpart of tasks/steps/debian/vscode.yml.
 # VSCode publishes a universal macOS zip at a stable URL — no repo, no brew.
 # The .app goes into /Applications (admin-writable) and the `code` CLI is
 # symlinked into ~/.local/bin.

@@ -1,5 +1,5 @@
 ---
-# macOS counterpart of tasks/steps/install_wezterm.yml.
+# macOS counterpart of tasks/steps/debian/install_wezterm.yml.
 # WezTerm publishes a macOS zip containing WezTerm.app on every release.
 # Admin users can write to /Applications, so no sudo is needed.
 

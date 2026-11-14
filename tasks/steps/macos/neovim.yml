@@ -1,5 +1,5 @@
 ---
-# macOS counterpart of tasks/steps/neovim.yml.
+# macOS counterpart of tasks/steps/debian/neovim.yml.
 # Same pinned release, macOS asset names (nvim-macos-arm64 / nvim-macos-x86_64).
 # Unpacked under ~/.local with the binary symlinked into ~/.local/bin (already
 # on PATH via .zprofile), so no sudo is needed.

@@ -4,7 +4,7 @@ set -euo pipefail
 
 identifier="$(< /dev/urandom tr -dc 'a-z0-9' | fold -w 5 | head -n 1)" ||:
 NAME="macos"
-base_dir="$(dirname "$(readlink -f "$0")")"
+base_dir="$(cd "$(dirname "$(readlink -f "$0")")/../.." && pwd)"
 DBG_LVL="${1:-}"
 DBG=""
 
@@ -42,7 +42,7 @@ function create_temporary_ssh_id() {
 function ensure_container() {
     if ! docker ps --format '{{.Names}}' | grep -qx "${NAME}"; then
         echo "Container ${NAME} is not running, starting it..."
-        docker compose --file "${base_dir}/../docker-compose.yml" up -d "${NAME}"
+        docker compose --file "${base_dir}/docker-compose.yml" up -d "${NAME}"
     fi
 }
 
@@ -110,7 +110,7 @@ EOL
 }
 
 function run_ansible_ping() {
-    export ANSIBLE_CONFIG="${base_dir}/../ansible.cfg"
+    export ANSIBLE_CONFIG="${base_dir}/ansible.cfg"
 
     echo "Running ansible ping against mac..."
     # shellcheck disable=SC2086
