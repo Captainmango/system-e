@@ -32,11 +32,12 @@
     path: /tmp/git-town_extract
     state: directory
 
+# unarchive refuses .tar.gz without GNU tar, and macOS only ships bsd tar, so
+# unpack with tar itself.
 - name: Unpack git-town
-  unarchive:
-    src: "/tmp/git-town_macos_{{ git_town_arch }}.tar.gz"
-    dest: /tmp/git-town_extract
-    remote_src: yes
+  command: "tar -xzf /tmp/git-town_macos_{{ git_town_arch }}.tar.gz -C /tmp/git-town_extract"
+  args:
+    creates: /tmp/git-town_extract/git-town
 
 - name: Install the git-town binary
   copy:

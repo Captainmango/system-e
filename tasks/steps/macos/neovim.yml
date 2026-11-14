@@ -13,11 +13,22 @@
     path: ~/.local
     state: directory
 
-- name: Download Neovim and unpack
-  unarchive:
-    src: "https://github.com/neovim/neovim/releases/download/v0.12.1/{{ nvim_asset }}.tar.gz"
-    dest: ~/.local
-    remote_src: yes
+- name: Download Neovim
+  get_url:
+    url: "https://github.com/neovim/neovim/releases/download/v0.12.1/{{ nvim_asset }}.tar.gz"
+    dest: "/tmp/{{ nvim_asset }}.tar.gz"
+    mode: '0644'
+  register: nvim_download
+  retries: 3
+  delay: 5
+  until: nvim_download is succeeded
+
+# unarchive refuses .tar.gz without GNU tar, and macOS only ships bsd tar, so
+# unpack with tar itself.
+- name: Unpack Neovim
+  command: "tar -xzf /tmp/{{ nvim_asset }}.tar.gz -C {{ ansible_env.HOME }}/.local"
+  args:
+    creates: "{{ ansible_env.HOME }}/.local/{{ nvim_asset }}/bin/nvim"
 
 - name: Symlink nvim into ~/.local/bin
   file:

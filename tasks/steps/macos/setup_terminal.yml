@@ -42,18 +42,18 @@
     line: ZSH_THEME="robbyrussell"
     create: yes
 
-- name: Install Starship into ~/.local/bin (no sudo needed)
-  shell: curl -sS https://starship.rs/install.sh | sh -s -- -y
-  args:
-    creates: ~/.local/bin/starship
-  environment:
-    INSTALL_PATH: "{{ ansible_env.HOME }}/.local/bin"
+# - name: Install Starship into ~/.local/bin (no sudo needed)
+#   shell: curl -sS https://starship.rs/install.sh | sh -s -- -y
+#   args:
+#     creates: ~/.local/bin/starship
+#   environment:
+#     INSTALL_PATH: "{{ ansible_env.HOME }}/.local/bin"
 
-- name: Add Starship init to .zshrc
-  lineinfile:
-    path: ~/.zshrc
-    line: 'eval "$(starship init zsh)"'
-    create: yes
+# - name: Add Starship init to .zshrc
+#   lineinfile:
+#     path: ~/.zshrc
+#     line: 'eval "$(starship init zsh)"'
+#     create: yes
 
 - name: Set EDITOR in .zshrc
   lineinfile:
