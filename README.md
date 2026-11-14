@@ -9,12 +9,32 @@ Ansible stuff that gets a new machine set up for me. This is supposed to be my b
 > Prefer stability over speed
 
 ## Usage
+
+This works for Debian Distros or MacOS. Use the relevant instructions.
+
+### Debian
 1. Clone the repo
-2. Update the package repository (this was made for Debian distros so use APT)
+2. Update the package repository
 3. Run the install local bin script `./bin/install-local.sh`
 4. Go off and do something else (If TZInfo isn't installed, the script will ask for this.)
-5. Check everything has run as expected (Probably hasn't lol)
+5. Check everything has run as expected
 6. Install Git Town https://www.git-town.com/install
+
+### MacOS
+1. Run `docker compose up -d` to start the Mac Docker VM
+    a. Connect to port 8006 using your web browser.
+    b. After the recovery image is downloaded, a black screen with a progress bar will appear while macOS downloads the remaining installation files.
+    c. Once the download is complete, the macOS recovery menu will appear.
+    d. Choose Disk Utility and then select the largest Apple Inc. VirtIO Block Media disk.
+    e. Click the Erase button to format the disk to APFS, and give it any name you like.
+    f. Close the current window and proceed the installation by clicking Reinstall macOS.
+    g. When prompted where you want to install it, select the disk you created previously.
+    h. After all files are copied, select your region, language, and keyboard settings.
+    i. When the Migration Assistant wants to transfer data, select Not now (bottom left).
+    j. On the Apple ID screen, select Set Up Later (bottom left) and then proceed using Skip.
+    k. On the Create a Computer Account screen, fill in a username and password and Continue.
+
+
 
 ## Todo list
 - [x] Set up Ansible playbooks in tasks folder
@@ -31,9 +51,8 @@ Ansible stuff that gets a new machine set up for me. This is supposed to be my b
 - [x] Move to Starship over Powerline10k
 - [ ] Optional tasks
     - [ ] Bitwarden
-    - [ ] Chrome
-    - [ ] Obsidian + vaults
-    - [ ] Directory structure
+    - [x] Chrome
+    - [x] Obsidian + vaults
 
 
 ### basic deps
@@ -42,12 +61,12 @@ Ansible stuff that gets a new machine set up for me. This is supposed to be my b
 - ~c-utils (build-essentials)~
 - ~curl~
 - ~git cli~
-- git-town
+- ~git-town~
 - ~portainer~
 - ~tmux~
 - ~ohmyzsh~
 - ~powerline10k~
-- Starship
+- ~Starship~
 
 
 ### Post Run Checklist
@@ -55,5 +74,5 @@ Ansible stuff that gets a new machine set up for me. This is supposed to be my b
 - [ ] Copy config using yadm `sudo yadm pull -f [config repo thing here]`
 - [ ] Check path is set up
 - [ ] Make sure SystemD daemon is reloaded
-- [ ] Install languages we need
+- [ ] Make sure Mise is set up right so we can install languages
 

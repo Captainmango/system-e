@@ -4,7 +4,8 @@
 Ansible playbooks for bootstrapping new Debian/Ubuntu machines with a minimal, opinionated environment (ZSH, Starship, tmux, Docker, Neovim, fonts, base tools).
 
 # IMPORTANT
-Never run the test-container.sh script. Ask the user to run this and provide the output. It takes too long to run in a chat session.
+- Never run the test-container.sh script. Ask the user to run this and provide the output. It takes too long to run in a chat session.
+- Ignore macos folder completely. It contains the container image used for basic testing and should not ever be considered read.
 
 ## Key Files
 | File | Purpose |

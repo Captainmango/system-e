@@ -1,0 +1,23 @@
+services:
+  macos:
+    image: dockurr/macos
+    container_name: macos
+    environment:
+      VERSION: "15"        # 15 is the default. 16 is slow but shouldn't matter
+      RAM_SIZE: "8G"       # Usually on AMD hosts. Docs say not to exceed this on those
+      CPU_CORES: "4"       
+      DISK_SIZE: "64G"     # Double the min... just in case
+    devices:
+      - /dev/kvm
+      - /dev/net/tun
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - 8006:8006
+      - 5900:5900/tcp
+      - 5900:5900/udp
+      - 2222:22 # for ssh
+    volumes:
+      - ./macos:/storage
+    restart: unless-stopped
+    stop_grace_period: 2m
